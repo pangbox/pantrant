@@ -1,0 +1,25 @@
+{
+  "name": "pantrant",
+  "version": "1.0.0",
+  "description": "Pangya Network Transmission Analysis Tool",
+  "main": "index.js",
+  "license": "ISC",
+  "scripts": {
+    "serve": "parcel serve app/index.html",
+    "build": "parcel build app/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^3.8.0",
+    "@blueprintjs/select": "^3.3.0",
+    "@types/react": "^16.7.3",
+    "@types/react-dom": "^16.0.9",
+    "react": "16.7.0-alpha.0",
+    "react-dom": "16.7.0-alpha.0",
+    "react-mosaic-component": "^2.0.2",
+    "rxjs": "^6.3.3"
+  }
+}

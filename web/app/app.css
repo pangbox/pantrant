@@ -1,0 +1,137 @@
+html,
+body,
+#app,
+#app-tabs {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #202b33;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+#app .bp3-tabs {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#app .bp3-tabs .bp3-tab-panel {
+  position: relative;
+}
+
+#app .bp3-tabs .bp3-tab-panel .mosaic {
+  position: static;
+}
+
+#app .bp3-tabs .bp3-tab-list {
+  margin: 0 6px;
+}
+
+#app .bp3-tabs .bp3-tab-panel {
+  flex-grow: 1;
+  margin: 0;
+}
+
+#app .bp3-card {
+  padding: 10px;
+}
+
+#app .mosaic-window-body {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+}
+
+#app .origin-server {
+  margin-left: 16px;
+}
+#app .origin-client {
+  margin-right: 16px;
+}
+
+#app .message-card {
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+#app .kind-gameserver {
+  background-color: rgb(48, 48, 61);
+}
+
+#app .kind-gameserver.origin-client {
+  background-color: rgb(90, 90, 141);
+}
+
+#app .kind-loginserver {
+  background-color: rgb(48, 61, 48);
+}
+
+#app .kind-loginserver.origin-client {
+  background-color: rgb(90, 141, 90);
+}
+
+#app .kind-messageserver {
+  background-color: rgb(61, 48, 61);
+}
+
+#app .kind-messageserver.origin-client {
+  background-color: rgb(141, 90, 141);
+}
+
+#app .message-collapsed {
+  max-height: 100px;
+}
+
+#app .hexedit {
+  display: grid;
+  grid-template-columns: 50px 1fr 170px;
+  grid-auto-flow: column;
+  grid-gap: 5px;
+  font-family: monospace;
+}
+
+#app .hexedit .addr {
+  grid-column-start: 1;
+}
+
+#app .hexedit .hex {
+  grid-column-start: 2;
+}
+
+#app .hexedit .ascii {
+  grid-column-start: 3;
+}
+
+#app .hexedit .hidden {
+  overflow: hidden;
+  height: 0px;
+  width: 0px;
+  display: inline-block;
+}
+
+#app .hexedit .byte {
+  -webkit-user-select: all;
+  user-select: all;
+  margin-right: .5em;
+}
+
+#app .hexedit .char.bin {
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+#app .hexedit .char.bin {
+  color: #888;
+}
+
+#app .hexedit .byte:hover,
+#app .hexedit .byte.shadowsel,
+#app .hexedit .char:hover,
+#app .hexedit .char.shadowsel {
+  background-color: rgba(235, 135, 135, 0.25);
+}

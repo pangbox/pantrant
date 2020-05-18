@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "target": "esnext",
+        "module": "esNext"
+    }
+}

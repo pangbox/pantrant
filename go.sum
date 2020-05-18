@@ -1,0 +1,17 @@
+github.com/elazarl/go-bindata-assetfs v1.0.0 h1:G/bYguwHIzWq9ZoyUQqrjTmJbbYn3j3CKKpKinvZLFk=
+github.com/elazarl/go-bindata-assetfs v1.0.0/go.mod h1:v+YaWX3bdea5J/mo8dSETolEo7R71Vk1u8bnjau5yw4=
+github.com/google/gopacket v1.1.16 h1:u6Afvia5C5srlLcbTwpHaFW918asLYPxieziOaWwz8M=
+github.com/google/gopacket v1.1.16/go.mod h1:UCLx9mCmAwsVbn6qQl1WIEt2SO7Nd2fD0th1TBAsqBw=
+github.com/mdlayher/raw v0.0.0-20181016155347-fa5ef3332ca9 h1:tOtO8DXiNGj9NshRKHWiZuGlSldPFzFCFYhNtsKTBCs=
+github.com/mdlayher/raw v0.0.0-20181016155347-fa5ef3332ca9/go.mod h1:rC/yE65s/DoHB6BzVOUBNYBGTg772JVytyAytffIZkY=
+github.com/pangbox/pangcrypt v0.0.0-20181124232112-60117463a15d h1:WZa3yBhrPN1+6aFHkQhD5xbTttYwxVw0RsXG5lsJOj0=
+github.com/pangbox/pangcrypt v0.0.0-20181124232112-60117463a15d/go.mod h1:5Bd6YEPYgUrM2LygkXw8oMERGUItIxlxdpnmuE+5pkM=
+github.com/rasky/go-lzo v0.0.0-20151023001055-affec0788321 h1:lDAd4GuNYYOZE4wD9sET4eKTiCPS/Ginh3iwnYAqwxY=
+github.com/rasky/go-lzo v0.0.0-20151023001055-affec0788321/go.mod h1:9leZcVcItj6m9/CfHY5Em/iBrCz7js8LcRQGTKEEv2M=
+golang.org/x/net v0.0.0-20190213061140-3a22650c66bd h1:HuTn7WObtcDo9uEEU7rEqL0jYthdXAmZ6PP+meazmaU=
+golang.org/x/net v0.0.0-20190213061140-3a22650c66bd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a h1:1BGLXjeY4akVXGgbC9HugT3Jv3hCI0z56oJR5vAMgBU=
+golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.2.2 h1:ZCJp+EgiOT7lHqUV2J862kp8Qj64Jo6az82+3Td9dZw=
+gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
