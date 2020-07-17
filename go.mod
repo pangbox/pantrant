@@ -1,12 +1,14 @@
 module github.com/pangbox/pantrant
 
+go 1.14
+
 require (
-	github.com/elazarl/go-bindata-assetfs v1.0.0
-	github.com/google/gopacket v1.1.16
-	github.com/mdlayher/raw v0.0.0-20181016155347-fa5ef3332ca9 // indirect
-	github.com/pangbox/pangcrypt v0.0.0-20181124232112-60117463a15d
-	github.com/rasky/go-lzo v0.0.0-20151023001055-affec0788321 // indirect
-	golang.org/x/net v0.0.0-20190213061140-3a22650c66bd // indirect
-	golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a // indirect
-	gopkg.in/yaml.v2 v2.2.2
+	github.com/elazarl/go-bindata-assetfs v1.0.1
+	github.com/google/gopacket v1.1.17
+	github.com/mdlayher/raw v0.0.0-20191009151244-50f2db8cc065 // indirect
+	github.com/pangbox/pangcrypt v0.0.0-20190803201906-607031ebee3a
+	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e // indirect
+	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
+	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
+	gopkg.in/yaml.v2 v2.3.0
 )
