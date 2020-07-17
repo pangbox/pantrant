@@ -31,7 +31,7 @@ func (s *Stream) consumeHelloPacket(time time.Time, data []byte) {
 	}
 }
 
-func (s *Stream) consumeServerPacket(time time.Time, data []byte) []pointInTimeError {
+func (s *Stream) consumeServerPacket(time time.Time, data []byte) []error {
 	if len(data) == 0 {
 		return nil
 	}
@@ -44,7 +44,7 @@ func (s *Stream) consumeServerPacket(time time.Time, data []byte) []pointInTimeE
 
 	s.serverBuf = append(s.serverBuf, data...)
 
-	var errors []pointInTimeError
+	var errors []error
 
 	for len(s.serverBuf) > 4 {
 		var msgData []byte
@@ -74,10 +74,10 @@ func (s *Stream) consumeServerPacket(time time.Time, data []byte) []pointInTimeE
 	return errors
 }
 
-func (s *Stream) consumeClientPacket(time time.Time, data []byte) []pointInTimeError {
+func (s *Stream) consumeClientPacket(time time.Time, data []byte) []error {
 	s.clientBuf = append(s.clientBuf, data...)
 
-	var errors []pointInTimeError
+	var errors []error
 
 	for len(s.clientBuf) > 4 {
 		var msgData []byte

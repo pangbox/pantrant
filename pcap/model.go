@@ -37,6 +37,7 @@ type Stream struct {
 	CryptoKey byte
 	HelloMsg  Message
 	Messages  []Message
+	Errors    []error
 
 	clientBuf []byte
 	serverBuf []byte

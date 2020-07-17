@@ -45,6 +45,9 @@ func main() {
 				for _, message := range stream.Messages {
 					filehash.Write(message.Data)
 				}
+				for _, err := range stream.Errors {
+					log.Printf("err: %s", err)
+				}
 			}
 			filesum := hex.EncodeToString(filehash.Sum(nil))[:4]
 

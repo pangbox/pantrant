@@ -2,6 +2,7 @@ package pcap
 
 import (
 	"encoding/binary"
+	"fmt"
 	"log"
 	"time"
 
@@ -14,6 +15,7 @@ var pangyaPorts = map[uint16]ServerKind{
 	10101: LoginServer,
 	10201: LoginServer,
 	10103: LoginServer,
+	10303: LoginServer,
 	20201: GameServer,
 	20202: GameServer,
 	20203: GameServer,
@@ -32,11 +34,14 @@ type pointInTimeError struct {
 	Err  error
 }
 
+func (e pointInTimeError) Unwrap() error { return e.Err }
+
+func (e pointInTimeError) Error() string { return fmt.Sprintf("%s: %s", e.Time, e.Err) }
+
 type pangTCPStream struct {
 	net, transport gopacket.Flow
 	direction      MessageOrigin
 	stream         *Stream
-	err            []pointInTimeError
 }
 
 func (h *pangTCPStream) Reassembled(reassembly []tcpassembly.Reassembly) {
@@ -44,9 +49,10 @@ func (h *pangTCPStream) Reassembled(reassembly []tcpassembly.Reassembly) {
 		switch h.direction {
 		case ServerMessage:
 			errs := h.stream.consumeServerPacket(part.Seen, part.Bytes)
-			h.err = append(h.err, errs...)
+			h.stream.Errors = append(h.stream.Errors, errs...)
 		case ClientMessage:
-			h.stream.consumeClientPacket(part.Seen, part.Bytes)
+			errs := h.stream.consumeClientPacket(part.Seen, part.Bytes)
+			h.stream.Errors = append(h.stream.Errors, errs...)
 		}
 	}
 }
@@ -79,7 +85,8 @@ func (h *pangTCPStreamFactory) New(net, transport gopacket.Flow) tcpassembly.Str
 	} else if _, ok := pangyaPorts[srcport]; ok {
 		stream, ok = h.streammap[transport.Reverse()]
 		if !ok {
-			log.Fatalf("TCP server/client mismatch: %s %s", net, transport)
+			log.Printf("unexpected server-before-client stream: %s %s", net, transport)
+			return nilStream{}
 		}
 		direction = ServerMessage
 	} else {
