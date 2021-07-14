@@ -110,7 +110,9 @@ func runServer(listen string, cassettes []*cassette) error {
 
 		case "/cassettes.json":
 			rw.Header().Set("Content-Type", "text/json")
-			json.NewEncoder(rw).Encode(cassettes)
+			if err := json.NewEncoder(rw).Encode(cassettes); err != nil {
+				log.Printf("Error encoding output JSON: %v", err)
+			}
 			return
 
 		default:

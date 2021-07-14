@@ -30,9 +30,9 @@ func init() {
 
 func main() {
 	for _, arg := range flag.Args() {
-		filepath.Walk(arg, func(path string, f os.FileInfo, err error) error {
-			if f.IsDir() || !strings.Contains(path, ".pcap") {
-				return nil
+		err := filepath.Walk(arg, func(path string, f os.FileInfo, err error) error {
+			if f.IsDir() || !strings.Contains(path, ".pcap") || err != nil {
+				return err
 			}
 
 			streams, err := pcap.ExtractStreamsFromFile(path)
@@ -43,10 +43,12 @@ func main() {
 			filehash := sha256.New()
 			for _, stream := range streams {
 				for _, message := range stream.Messages {
-					filehash.Write(message.Data)
+					if _, err := filehash.Write(message.Data); err != nil {
+						log.Printf("hash err: %v", err)
+					}
 				}
 				for _, err := range stream.Errors {
-					log.Printf("err: %s", err)
+					log.Printf("err: %v", err)
 				}
 			}
 			filesum := hex.EncodeToString(filehash.Sum(nil))[:4]
@@ -54,7 +56,9 @@ func main() {
 			for j, stream := range streams {
 				streamhash := sha256.New()
 				for _, message := range stream.Messages {
-					streamhash.Write(message.Data)
+					if _, err := streamhash.Write(message.Data); err != nil {
+						log.Printf("hash err: %v", err)
+					}
 				}
 				streamsum := hex.EncodeToString(streamhash.Sum(nil))[:4]
 				for i, message := range stream.Messages {
@@ -79,5 +83,8 @@ func main() {
 
 			return nil
 		})
+		if err != nil {
+			log.Fatalf("Error processing %q: %v", arg, err)
+		}
 	}
 }
