@@ -2,14 +2,14 @@
   "name": "pantrant",
   "version": "1.0.0",
   "description": "Pangya Network Transmission Analysis Tool",
-  "main": "index.js",
+  "main": "app/index.html",
   "license": "ISC",
   "scripts": {
-    "serve": "parcel serve app/index.html",
-    "build": "parcel build app/index.html"
+    "serve": "parcel serve app/index.html --dist-dir dist",
+    "build": "parcel build app/index.html --dist-dir dist"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.10.3",
+    "parcel": "^2.0.0-beta.3.1",
     "typescript": "^3.1.6"
   },
   "dependencies": {
