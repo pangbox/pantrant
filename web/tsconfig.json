@@ -5,6 +5,10 @@
         "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",
         "target": "esnext",
-        "module": "esNext"
-    }
+        "module": "esNext",
+        "noEmit": true
+    },
+    "include": [
+        "./app/**/*.tsx"
+    ]
 }

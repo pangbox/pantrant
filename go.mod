@@ -1,6 +1,6 @@
 module github.com/pangbox/pantrant
 
-go 1.14
+go 1.16
 
 require (
 	github.com/elazarl/go-bindata-assetfs v1.0.1

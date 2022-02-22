@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	assetfs "github.com/elazarl/go-bindata-assetfs"
@@ -116,6 +117,18 @@ func runServer(listen string, cassettes []*cassette) error {
 			return
 
 		default:
+			// Golang can be a bit flaky here, so override the content types.
+			if strings.HasSuffix(r.URL.Path, ".js") {
+				rw.Header().Set("Content-Type", "text/javascript")
+			} else if strings.HasSuffix(r.URL.Path, ".css") {
+				rw.Header().Set("Content-Type", "text/css")
+			} else if strings.HasSuffix(r.URL.Path, ".woff") {
+				rw.Header().Set("Content-Type", "font/woff")
+			} else if strings.HasSuffix(r.URL.Path, ".ttf") {
+				rw.Header().Set("Content-Type", "font/tff")
+			} else if strings.HasSuffix(r.URL.Path, ".eot") {
+				rw.Header().Set("Content-Type", "font/eot")
+			}
 			assets.ServeHTTP(rw, r)
 		}
 	}))
