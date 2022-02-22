@@ -44,12 +44,21 @@ export const Packet = ({ event }: Props) => {
       <>&larr; {event.ServerKind}</>
     );
 
+  let packetOrigin = {
+    "gameserver": "gameservice",
+    "loginserver": "loginservice",
+    "messageserver": "messageservice"
+  }
+  let packetData = new Uint16Array(event.Message.Data.slice(0, 2));
+  let packetDocURL = "https://packets.pangdox.com/packets/" + packetOrigin[event.ServerKind.toLowerCase()] + "/" + event.Message.Origin.toLowerCase() + "/" + ("0000" + packetData[0].toString(16)).substr(-4);
+
   const controls = 
     <VideoConsumer>
       {videoControl =>
         <ButtonGroup>
           <Button minimal={true} small={true} icon="cross" onClick={() => setCollapsed(true)}>Close</Button>
           <Button minimal={true} small={true} icon="link" onClick={() => videoControl.currentTime = event.Time}>Seek to</Button>
+          <Button minimal={true} small={true} icon="link" onClick={() => window.open(packetDocURL, "_blank")}>Packetdoc</Button>
         </ButtonGroup>
       }
     </VideoConsumer>;
