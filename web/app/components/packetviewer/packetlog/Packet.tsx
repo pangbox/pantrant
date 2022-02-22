@@ -50,7 +50,7 @@ export const Packet = ({ event }: Props) => {
     "messageserver": "messageservice"
   }
   let packetData = new Uint16Array(event.Message.Data.slice(0, 2));
-  let packetDocURL = "https://packets.pangdox.com/packets/" + packetOrigin[event.ServerKind.toLowerCase()] + "/" + event.Message.Origin.toLowerCase() + "/" + ("0000" + packetData[0].toString(16)).substr(-4);
+  let packetDocURL = (event.Type === "Connect") ? "https://packets.pangdox.com/protocol.html" : "https://packets.pangdox.com/packets/" + packetOrigin[event.ServerKind.toLowerCase()] + "/" + event.Message.Origin.toLowerCase() + "/" + ("0000" + packetData[0].toString(16)).substr(-4)
 
   const controls = 
     <VideoConsumer>
