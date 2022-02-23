@@ -96,7 +96,7 @@ export class Cassette {
     });
 
     this.Events.sort((b, a) =>
-      a.Time < b.Time ? -1 : a.Time > b.Time ? 1 : 0
+      a.Time < b.Time ? -1 : a.Time > b.Time ? 1 : a.ID < b.ID ? -1 : a.ID > b.ID ? 1 : 0
     );
   }
 }
