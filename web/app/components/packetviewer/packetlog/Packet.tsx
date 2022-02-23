@@ -62,11 +62,15 @@ export const Packet = ({ event }: Props) => {
         </ButtonGroup>
       }
     </VideoConsumer>;
+  
+  let packetTimestamp = ( (event.Time >= 3600) ? Math.floor(event.Time/3600) + ":" : "" ) +
+                        ( (event.Time >= 60) ? Math.floor((event.Time % 3600)/60) + ":" : "" ) + 
+                        Math.floor(event.Time % 60) + "." + Math.floor(event.Time * 1000 % 1000);
 
   return (
     <Card interactive={collapsed} className={classes.join(" ")} onClick={() => collapsed ? setCollapsed(false) : null}>
       {collapsed ? null : <div>{controls}<hr/></div>}
-      <div><small>{direction} &bull; {name}</small></div>
+      <div><small>{direction} &bull; {packetTimestamp} &bull; Seq# {event.ID} &bull; {name} </small></div>
       <HexView data={event.Message.Data} collapsed={collapsed}></HexView>
     </Card>
   );
