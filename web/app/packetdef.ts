@@ -296,7 +296,7 @@ const packetDefs: PacketDef[] = [
       "0216": "0216-User Status Update",
       "021B": "021B-Black Papel Result",
       "021D": "021D-Achievement Progress Report",
-      "021E": "021E-Achievemtn Association Report",
+      "021E": "021E-Achievement Association Report",
       "0220": "0220-Achievement Update",
       "0225": "0225-Quest Status Response",
       "0226": "0226-Quest Accept Response",
