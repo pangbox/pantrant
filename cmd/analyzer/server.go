@@ -9,9 +9,8 @@ import (
 	"strings"
 	"time"
 
-	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/pangbox/pantrant/internal/bindata"
 	"github.com/pangbox/pantrant/pcap"
+	"github.com/pangbox/pantrant/web"
 )
 
 type message struct {
@@ -86,7 +85,7 @@ func newCassette(params cassetteParams) (*cassette, error) {
 }
 
 func runServer(listen string, cassettes []*cassette) error {
-	assets := http.FileServer(&assetfs.AssetFS{Asset: bindata.Asset, AssetDir: bindata.AssetDir, AssetInfo: bindata.AssetInfo, Prefix: ""})
+	assets := http.FileServer(http.FS(web.App))
 	vidmap := map[string]string{}
 
 	for _, c := range cassettes {
@@ -129,6 +128,7 @@ func runServer(listen string, cassettes []*cassette) error {
 			} else if strings.HasSuffix(r.URL.Path, ".eot") {
 				rw.Header().Set("Content-Type", "font/eot")
 			}
+			r.URL.Path = "/gen" + r.URL.Path
 			assets.ServeHTTP(rw, r)
 		}
 	}))

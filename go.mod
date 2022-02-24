@@ -3,9 +3,7 @@ module github.com/pangbox/pantrant
 go 1.16
 
 require (
-	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/google/gopacket v1.1.17
-	github.com/mdlayher/raw v0.0.0-20191009151244-50f2db8cc065 // indirect
 	github.com/pangbox/pangcrypt v0.0.0-20190803201906-607031ebee3a
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
