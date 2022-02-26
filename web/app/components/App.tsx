@@ -51,7 +51,8 @@ export const App = (props: Props) => {
           filterable={false}
         >
           <Button
-            text={appData.currentCassette.Name}
+            text={appData.currentCassette?.Name || "No Cassette"}
+            disabled={appData.cassettes.length == 0}
             rightIcon="double-caret-vertical"
             small={true}
             minimal={true}

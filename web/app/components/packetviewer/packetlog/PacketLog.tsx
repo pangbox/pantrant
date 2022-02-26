@@ -82,7 +82,7 @@ export const PacketLog = () => {
           {appData => (
             <VideoConsumer>
               {(VideoControl, currentTime) =>
-                appData ? (
+                appData?.currentCassette ? (
                   <PacketListView
                     timeWindow={timeWindow}
                     timeOffset={timeOffset}

@@ -44,7 +44,7 @@ export const Packet = ({ event }: Props) => {
       <>&larr; {event.ServerKind}</>
     );
 
-  let packetOrigin = {
+  let packetOrigin: {[key: string]: string} = {
     "gameserver": "gameservice",
     "loginserver": "loginservice",
     "messageserver": "messageservice"

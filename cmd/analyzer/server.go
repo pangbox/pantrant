@@ -5,7 +5,9 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -95,7 +97,25 @@ func runServer(listen string, cassettes []*cassette) error {
 		c.VideoURL = "/video.mp4?" + namehash
 	}
 
-	return http.ListenAndServe(listen, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	ln, err := net.Listen("tcp", listen)
+	if err != nil {
+		log.Printf("Hint: change listen address with -listen.")
+		return err
+	}
+
+	host, port, err := net.SplitHostPort(ln.Addr().String())
+	if err != nil {
+		return err
+	}
+
+	if host == "::" || host == "0.0.0.0" {
+		host = "localhost"
+	}
+
+	listenUrl := url.URL{Scheme: "http", Host: net.JoinHostPort(host, port)}
+	log.Printf("Listening at %s", listenUrl.String())
+
+	return http.Serve(ln, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/video.mp4":
 			vidfilename, ok := vidmap[r.URL.RawQuery]

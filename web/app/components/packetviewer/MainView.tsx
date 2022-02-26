@@ -22,7 +22,7 @@ const WINDOW_MAP: Record<WindowId, WindowType> = {
     title: "Video",
     component: () => (
       <AppDataContext.Consumer>
-        {appData => appData ? (
+        {appData => appData?.currentCassette ? (
           <VideoView src={appData.currentCassette.VideoUrl} key={appData.currentCassette.VideoUrl} />
         ) : null}
       </AppDataContext.Consumer>

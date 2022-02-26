@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -9,12 +10,11 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func init() {
-	flag.Parse()
-}
-
 func main() {
+	listen := flag.String("listen", ":8080", "address to listen on")
+	flag.Parse()
 	if flag.NArg() != 1 {
+		fmt.Fprintf(os.Stderr, "No cassettes.yml file provided.\nUsage: analyzer <cassettes.yml>\n\n")
 		flag.Usage()
 		os.Exit(0)
 	}
@@ -53,5 +53,5 @@ func main() {
 		cassettes = append(cassettes, cassette)
 	}
 
-	log.Fatalln(runServer(":8080", cassettes))
+	log.Fatalln(runServer(*listen, cassettes))
 }

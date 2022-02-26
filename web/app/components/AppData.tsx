@@ -2,7 +2,7 @@ import * as React from "react";
 import { Cassette } from "../cassette";
 
 export interface AppData {
-  currentCassette: Cassette;
+  currentCassette?: Cassette;
   cassettes: Cassette[];
 }
 
