@@ -58,6 +58,7 @@ func pmsgToMsg(videoStartTime time.Time, pmsg pcap.Message) message {
 func newCassette(params cassetteParams) (*cassette, error) {
 	videoStartTime := params.TimeReference.Add(time.Duration(-params.TimePosition*1000) * time.Millisecond)
 
+	log.Printf("Extracting pcap streams...")
 	pstreams, err := pcap.ExtractStreamsFromFile(params.PcapFilename)
 
 	if err != nil {
@@ -72,7 +73,8 @@ func newCassette(params cassetteParams) (*cassette, error) {
 		videoFn:  params.VideoFilename,
 	}
 
-	for _, pstream := range pstreams {
+	for i, pstream := range pstreams {
+		log.Printf("Reconstructed stream %d: %s [key=%02x]", i, pstream.Kind, pstream.CryptoKey)
 		s := stream{}
 		s.Kind = pstream.Kind
 		s.CryptoKey = pstream.CryptoKey
