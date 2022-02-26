@@ -8,6 +8,7 @@
     "build": "rimraf gen && parcel build app/index.html --dist-dir gen"
   },
   "devDependencies": {
+    "@parcel/validator-typescript": "^2.3.2",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
