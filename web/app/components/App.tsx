@@ -6,6 +6,7 @@ import { MainView as PacketViewer } from "./packetviewer/MainView";
 import { MainView as MessageAnalyzer } from "./messageanalyzer/MainView";
 import { AppData, AppDataContext } from "./AppData";
 import { Cassette } from "../cassette";
+import { VideoContext, VideoControl } from "./packetviewer/VideoControl";
 
 interface Props {
   appData: AppData;
@@ -31,34 +32,37 @@ export const renderCassette: ItemRenderer<Cassette> = (
 
 export const App = (props: Props) => {
   const [appData, setAppData] = React.useState(props.appData);
+  const [videoControl] = React.useState(() => new VideoControl());
 
   return (
     <AppDataContext.Provider value={appData}>
-      <Tabs id="app-tabs" defaultSelectedTabId="packet" className="bp3-dark">
-        <Tab id="packet" title="Packet Viewer" panel={<PacketViewer />} />
-        <Tab
-          id="message"
-          title="Message Analyzer"
-          panel={<MessageAnalyzer />}
-        />
-        <Tabs.Expander />
-        <Select<Cassette>
-          items={appData.cassettes}
-          itemRenderer={renderCassette}
-          onItemSelect={cassette => {
-            setAppData(Object.assign({}, appData, { currentCassette: cassette }))
-          }}
-          filterable={false}
-        >
-          <Button
-            text={appData.currentCassette?.Name || "No Cassette"}
-            disabled={appData.cassettes.length == 0}
-            rightIcon="double-caret-vertical"
-            small={true}
-            minimal={true}
+      <VideoContext value={videoControl}>
+        <Tabs id="app-tabs" defaultSelectedTabId="packet" className="bp3-dark">
+          <Tab id="packet" title="Packet Viewer" panel={<PacketViewer />} />
+          <Tab
+            id="message"
+            title="Message Analyzer"
+            panel={<MessageAnalyzer />}
           />
-        </Select>
-      </Tabs>
+          <Tabs.Expander />
+          <Select<Cassette>
+            items={appData.cassettes}
+            itemRenderer={renderCassette}
+            onItemSelect={cassette => {
+              setAppData(Object.assign({}, appData, { currentCassette: cassette }))
+            }}
+            filterable={false}
+          >
+            <Button
+              text={appData.currentCassette?.Name || "No Cassette"}
+              disabled={appData.cassettes.length == 0}
+              rightIcon="double-caret-vertical"
+              small={true}
+              minimal={true}
+            />
+          </Select>
+        </Tabs>
+      </VideoContext>
     </AppDataContext.Provider>
   );
 };

@@ -8,52 +8,44 @@ import { AppDataContext } from '../AppData';
 interface Props {
   messageTypes: MessageType[];
   messages: Map<MessageType, Message[]>;
+  setCurrentMessageType: (type: MessageType|null) => void;
 }
 
 interface State {
   expanded: Set<string|number>;
+  selected: string|number|null;
 }
 
 type NodePath = number[];
 
-export const PacketTree = (props: Props) => {
+export const PacketTypeTree = (props: Props) => {
   const [state, setState] = React.useState<State>({
     expanded: new Set,
+    selected: null,
   })
 
-  const handleNodeClick = React.useCallback(
-    (node: TreeNodeInfo, nodePath: NodePath, e: React.MouseEvent<HTMLElement>) => {
-      const originallySelected = node.isSelected;
-      if (!e.shiftKey) {
-        //dispatch({ type: "DESELECT_ALL" });
-      }
-      //dispatch({
-      //    payload: { path: nodePath, isSelected: originallySelected == null ? true : !originallySelected },
-      //    type: "SET_IS_SELECTED",
-      //});
-    },
-    [],
-  );
+  const handleNodeClick = React.useCallback((node: TreeNodeInfo<MessageType>) => {
+    props.setCurrentMessageType(node.nodeData ?? null);
+    setState({...state, selected: node.id});
+  }, [state]);
 
-  const handleNodeCollapse = React.useCallback((node: TreeNodeInfo) => {
+  const handleNodeCollapse = React.useCallback((node: TreeNodeInfo<MessageType>) => {
     const expanded = new Set(state.expanded);
     expanded.delete(node.id);
-    console.log([...expanded], [...state.expanded]);
     setState({...state, expanded});
   }, [state]);
 
-  const handleNodeExpand = React.useCallback((node: TreeNodeInfo) => {
+  const handleNodeExpand = React.useCallback((node: TreeNodeInfo<MessageType>) => {
     const expanded = new Set(state.expanded);
     expanded.add(node.id);
-    console.log([...expanded], [...state.expanded]);
     setState({...state, expanded});
   }, [state]);
 
-  let tree: TreeNodeInfo[] = [];
+  let tree: TreeNodeInfo<MessageType>[] = [];
   let kindNodes: Map<string, {
-    parent: TreeNodeInfo;
+    parent: TreeNodeInfo<MessageType>;
     originNodes: Map<string, {
-      parent: TreeNodeInfo;
+      parent: TreeNodeInfo<MessageType>;
     }>;
   }> = new Map();
 
@@ -61,10 +53,11 @@ export const PacketTree = (props: Props) => {
     let kindNode = kindNodes.get(msgType.Kind);
     if (!kindNode) {
       const id = `${msgType.Kind}`;
-      const node: TreeNodeInfo = {
+      const node: TreeNodeInfo<MessageType> = {
         id,
         icon: "application",
         isExpanded: state.expanded.has(id),
+        isSelected: state.selected === id,
         label: (
           <ContextMenu2 {...contentSizing} content={<div>placeholder</div>}>
             <Tooltip2 content="placeholder" placement="right">
@@ -84,10 +77,11 @@ export const PacketTree = (props: Props) => {
     let originNode = kindNode.originNodes.get(msgType.Origin);
     if (!originNode) {
       const id = `${msgType.Kind}-${msgType.Origin}`;
-      const node: TreeNodeInfo = {
+      const node: TreeNodeInfo<MessageType> = {
         id,
         icon: msgType.Origin === "client" ? "import" : "export",
         isExpanded: state.expanded.has(id),
+        isSelected: state.selected === id,
         label: (
           <ContextMenu2 {...contentSizing} content={<div>placeholder</div>}>
             <Tooltip2 content="placeholder" placement="right">
@@ -105,10 +99,12 @@ export const PacketTree = (props: Props) => {
     }
     const name = getPacketName(msgType.Kind, msgType.Origin, msgType.ID);
     const id = `${msgType.Kind}-${msgType.Origin}-${msgType.ID}`;
-    const node: TreeNodeInfo = {
+    const node: TreeNodeInfo<MessageType> = {
       id,
       icon: "document",
-      label: name
+      label: name,
+      nodeData: msgType,
+      isSelected: state.selected === id,
     };
     originNode.parent.childNodes = [...originNode.parent.childNodes ?? [], node]
   }
@@ -116,7 +112,7 @@ export const PacketTree = (props: Props) => {
   return (
     <AppDataContext.Consumer>
       {appData => appData?.currentCassette ? (
-        <Tree
+        <Tree<MessageType>
           contents={tree}
           onNodeClick={handleNodeClick}
           onNodeCollapse={handleNodeCollapse}
