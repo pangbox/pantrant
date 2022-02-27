@@ -20,6 +20,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.53.0",
     "@blueprintjs/icons": "^3.32.0",
+    "@blueprintjs/popover2": "^0.13.0",
     "@blueprintjs/select": "^3.18.12",
     "normalize.css": "^8.0.1",
     "react": "^17.0.2",

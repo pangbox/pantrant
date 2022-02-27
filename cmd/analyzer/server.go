@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"log"
@@ -14,6 +15,12 @@ import (
 	"github.com/pangbox/pantrant/pcap"
 	"github.com/pangbox/pantrant/web"
 )
+
+type msgtype struct {
+	Kind   pcap.ServerKind
+	Origin pcap.MessageOrigin
+	ID     uint16
+}
 
 type message struct {
 	Time   float64
@@ -29,10 +36,12 @@ type stream struct {
 }
 
 type cassette struct {
-	Name     string
-	Time     time.Time
-	Streams  []stream
-	VideoURL string
+	Name         string
+	Time         time.Time
+	Streams      []stream
+	Messages     map[uint32][]message
+	MessageTypes map[uint32]msgtype
+	VideoURL     string
 
 	videoFn string
 }
@@ -55,6 +64,25 @@ func pmsgToMsg(videoStartTime time.Time, pmsg pcap.Message) message {
 	}
 }
 
+func packType(mtype msgtype) uint32 {
+	packed := uint32(mtype.ID)
+	switch mtype.Kind {
+	case pcap.LoginServer:
+		packed |= 0x01000000
+	case pcap.GameServer:
+		packed |= 0x02000000
+	case pcap.MessageServer:
+		packed |= 0x03000000
+	}
+	switch mtype.Origin {
+	case pcap.ClientMessage:
+		packed |= 0x00010000
+	case pcap.ServerMessage:
+		packed |= 0x00020000
+	}
+	return packed
+}
+
 func newCassette(params cassetteParams) (*cassette, error) {
 	videoStartTime := params.TimeReference.Add(time.Duration(-params.TimePosition*1000) * time.Millisecond)
 
@@ -66,15 +94,17 @@ func newCassette(params cassetteParams) (*cassette, error) {
 	}
 
 	c := &cassette{
-		Name:     params.Name,
-		Time:     videoStartTime,
-		Streams:  []stream{},
-		VideoURL: "/video.mp4",
-		videoFn:  params.VideoFilename,
+		Name:         params.Name,
+		Time:         videoStartTime,
+		Streams:      []stream{},
+		Messages:     make(map[uint32][]message),
+		MessageTypes: make(map[uint32]msgtype),
+		VideoURL:     "/video.mp4",
+		videoFn:      params.VideoFilename,
 	}
 
 	for i, pstream := range pstreams {
-		log.Printf("Reconstructed stream %d: %s [key=%02x]", i, pstream.Kind, pstream.CryptoKey)
+		log.Printf("Reconstructed stream %d: %s [key=%01x]", i, pstream.Kind, pstream.CryptoKey)
 		s := stream{}
 		s.Kind = pstream.Kind
 		s.CryptoKey = pstream.CryptoKey
@@ -82,8 +112,21 @@ func newCassette(params cassetteParams) (*cassette, error) {
 		for _, msg := range pstream.Messages {
 			s.Messages = append(s.Messages, pmsgToMsg(videoStartTime, msg))
 		}
+		for _, msg := range pstream.Messages {
+			if len(msg.Data) < 2 {
+				log.Printf("Warning: message too small to contain ID?!")
+				continue
+			}
+			id := binary.LittleEndian.Uint16(msg.Data)
+			mtype := msgtype{s.Kind, msg.Origin, id}
+			pid := packType(mtype)
+			c.Messages[pid] = append(c.Messages[pid], pmsgToMsg(videoStartTime, msg))
+			c.MessageTypes[pid] = mtype
+		}
 		c.Streams = append(c.Streams, s)
 	}
+
+	log.Printf("Processing complete; %d streams, %d distinct message types", len(pstreams), len(c.Messages))
 
 	return c, nil
 }

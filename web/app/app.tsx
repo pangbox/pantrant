@@ -26,4 +26,7 @@ request
       document.getElementById("app")
     )
   )
-  .catch(err => console.error(err));
+  .catch(err => () => {
+    alert("App failed to load: " + err);
+    console.error(err)
+  });

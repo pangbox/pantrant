@@ -161,6 +161,8 @@ const demoCassettes: Array<Schema.Cassette> = [
                 ],
             },
         ],
+        MessageTypes: {},
+        Messages: {},
         VideoURL: require('url:./video.mp4'),
     },
 ];

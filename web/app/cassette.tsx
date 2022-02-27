@@ -19,10 +19,18 @@ export namespace Schema {
     Messages: Message[];
   }
 
+  export interface MessageType {
+    Kind: ServerKind;
+    Origin: MessageOrigin;
+    ID: number;
+  }
+
   export interface Cassette {
     Name: string;
     Time: string;
     Streams: Stream[];
+    Messages: {[id: string]: Message[]};
+    MessageTypes: {[id: string]: MessageType};
     VideoURL: string;
   }
 }
@@ -61,10 +69,24 @@ export type Event = {
   Message: Message;
 };
 
+export class MessageType {
+  Kind: ServerKind;
+  Origin: MessageOrigin;
+  ID: number;
+
+  constructor(data: Schema.MessageType) {
+    this.Kind = data.Kind;
+    this.Origin = data.Origin;
+    this.ID = data.ID;
+  }
+}
+
 export class Cassette {
   Name: string;
   Time: Date;
   Streams: Stream[];
+  Messages: Map<MessageType, Message[]>;
+  MessageTypes: MessageType[];
   Events: Event[];
   VideoUrl: string;
 
@@ -98,5 +120,32 @@ export class Cassette {
     this.Events.sort((b, a) =>
       a.Time < b.Time ? -1 : a.Time > b.Time ? 1 : a.ID < b.ID ? -1 : a.ID > b.ID ? 1 : 0
     );
+
+    this.MessageTypes = [];
+    this.Messages = new Map();
+
+    const MessageTypeMapping = new Map<number, MessageType>();
+    for (const [k, v] of Object.entries(data.MessageTypes)) {
+      const t = new MessageType(v);
+      MessageTypeMapping.set(Number(k), t);
+      this.MessageTypes.push(t);
+    }
+
+    for (const [k, v] of Object.entries(data.Messages)) {
+      const t = MessageTypeMapping.get(Number(k));
+      if (!t) {
+        throw new Error("Analyzer gave us message with undefined type.")
+      }
+      this.Messages.set(t, v.map(n => new Message(n)));
+    }
+
+    this.MessageTypes.sort((a, b) => (
+      a.Kind < b.Kind ? -1 :
+      a.Kind > b.Kind ? 1 :
+      a.Origin < b.Origin ? -1 :
+      a.Origin > b.Origin ? 1 :
+      a.ID < b.ID ? -1 :
+      b.ID > a.ID ? 1 : 0
+    ));
   }
 }
