@@ -25,7 +25,7 @@ function packetName(event: Event): string|null {
 
 export const Packet = ({ event }: Props) => {
   const [collapsed, setCollapsed] = React.useState(true);
-  const name = React.useMemo(() => packetName(event), []);
+  const name = React.useMemo(() => packetName(event), [event]);
 
   const classes = [
     "message-card",

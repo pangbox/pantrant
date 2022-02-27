@@ -9,8 +9,8 @@ interface Props {
 export const PacketListView = (props: Props) => {
   return (
     <React.Fragment>
-      {props.events.map(event => (
-        <Packet event={event} key={event.ID} />
+      {props.events.map((event, i) => (
+        <Packet event={event} key={`${event.ServerKind}:${event.Message.Origin}:${event.ID}:${i}`} />
       ))}
     </React.Fragment>
   );

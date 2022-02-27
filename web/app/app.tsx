@@ -22,7 +22,9 @@ request
   .then((data: any[]) => data.map(n => new Cassette(n)))
   .then(cassettes =>
     render(
-      <App appData={{ cassettes: cassettes, currentCassette: cassettes[0] }} />,
+      <React.StrictMode>
+        <App appData={{ cassettes: cassettes, currentCassette: cassettes[0] }} />
+      </React.StrictMode>,
       document.getElementById("app")
     )
   )

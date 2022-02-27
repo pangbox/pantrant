@@ -7,7 +7,7 @@ import { CurrentMessageType } from './PacketTypeSelector';
 
 function messagesToEvents(msgtype: MessageType, messages: Message[]): Event[] {
   return messages.map((message, i) => ({
-    ID: i++,
+    ID: msgtype.ID,
     Type: "Message",
     Time: message.Time,
     Message: message,

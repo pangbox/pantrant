@@ -3,14 +3,13 @@ import { Mosaic, MosaicWindow } from "react-mosaic-component";
 
 import { PacketLog } from "./packetlog/PacketLog";
 import { VideoView } from "./VideoView";
-import { AppDataContext, AppData } from "../AppData";
-import { VideoContext, VideoControl } from "./VideoControl";
+import { AppDataContext } from "../AppData";
 
 export type WindowId = "video" | "packet";
 
 interface WindowType {
   title: string;
-  component: React.StatelessComponent;
+  component: React.FunctionComponent;
 }
 
 const WINDOW_MAP: Record<WindowId, WindowType> = {
@@ -31,30 +30,26 @@ const WINDOW_MAP: Record<WindowId, WindowType> = {
 };
 
 export const MainView = () => {
-  const [videoControl] = React.useState(() => new VideoControl());
-
   return (
-    <VideoContext value={videoControl}>
-      <Mosaic<WindowId>
-        renderTile={(id, path) => {
-          const Component = WINDOW_MAP[id].component;
-          return (
-            <MosaicWindow<WindowId> path={path} title={WINDOW_MAP[id].title}>
-              <Component />
-            </MosaicWindow>
-          );
-        }}
-        initialValue={{
-          direction: "row",
-          first: "packet",
-          second: "video",
-          splitPercentage: 40
-        }}
-        resize={{
-          minimumPaneSizePercentage: 5
-        }}
-        className="mosaic-blueprint-theme bp3-dark"
-      />
-    </VideoContext>
+    <Mosaic<WindowId>
+      renderTile={(id, path) => {
+        const Component = WINDOW_MAP[id].component;
+        return (
+          <MosaicWindow<WindowId> path={path} title={WINDOW_MAP[id].title}>
+            <Component />
+          </MosaicWindow>
+        );
+      }}
+      initialValue={{
+        direction: "row",
+        first: "packet",
+        second: "video",
+        splitPercentage: 40
+      }}
+      resize={{
+        minimumPaneSizePercentage: 5
+      }}
+      className="mosaic-blueprint-theme bp3-dark"
+    />
   );
 };
