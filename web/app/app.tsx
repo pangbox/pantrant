@@ -5,9 +5,19 @@ import "react-mosaic-component/react-mosaic-component.css";
 
 import * as React from "react";
 import { render } from "react-dom";
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
 
 import { App } from "./components/App";
 import { Cassette } from "./cassette";
+import { SpecialFetchTransport } from "./transport";
+
+Sentry.init({
+  dsn: "https://b65027c09a1540f7af89932989800b69@errors.jchw.io/6238367",
+  integrations: [new BrowserTracing()],
+  tracesSampleRate: 1.0,
+  transport: SpecialFetchTransport,
+});
 
 let request: Promise<any>;
 declare var process: { env: { NODE_ENV: string } };

@@ -109,6 +109,7 @@ func newCassette(params cassetteParams) (*cassette, error) {
 		s.Kind = pstream.Kind
 		s.CryptoKey = pstream.CryptoKey
 		s.HelloMsg = pmsgToMsg(videoStartTime, pstream.HelloMsg)
+		s.Messages = []message{}
 		for _, msg := range pstream.Messages {
 			s.Messages = append(s.Messages, pmsgToMsg(videoStartTime, msg))
 		}
