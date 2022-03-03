@@ -14,7 +14,7 @@ export const PacketTypeSelector = (props: Props) => {
   return (
     <AppDataContext.Consumer>
       {appData => appData?.currentCassette ? (
-        <Card style={{ flexGrow: 1, overflowY: "scroll", marginTop: "6px" }}>
+        <Card style={{ flexGrow: 1, overflowY: "scroll", marginTop: "6px", padding: "0px" }}>
           <PacketTypeTree
             messages={appData.currentCassette.Messages}
             messageTypes={appData.currentCassette.MessageTypes}

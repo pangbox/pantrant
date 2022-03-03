@@ -1,5 +1,5 @@
-import { Classes, Icon, Intent, Tree, TreeNodeInfo } from '@blueprintjs/core';
-import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
+import { Classes, Tree, TreeNodeInfo } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import { Message, MessageType } from '../../cassette';
 import { getPacketName } from '../../packetdef';
@@ -16,13 +16,11 @@ interface State {
   selected: string|number|null;
 }
 
-type NodePath = number[];
-
 export const PacketTypeTree = (props: Props) => {
   const [state, setState] = React.useState<State>({
     expanded: new Set,
     selected: null,
-  })
+  });
 
   const handleNodeClick = React.useCallback((node: TreeNodeInfo<MessageType>) => {
     props.setCurrentMessageType(node.nodeData ?? null);
@@ -58,13 +56,7 @@ export const PacketTypeTree = (props: Props) => {
         icon: "application",
         isExpanded: state.expanded.has(id),
         isSelected: state.selected === id,
-        label: (
-          <ContextMenu2 {...contentSizing} content={<div>placeholder</div>}>
-            <Tooltip2 content="placeholder" placement="right">
-              {msgType.Kind}
-            </Tooltip2>
-          </ContextMenu2>
-        ),
+        label: msgType.Kind,
         childNodes: [],
       }
       kindNode = {
@@ -82,13 +74,7 @@ export const PacketTypeTree = (props: Props) => {
         icon: msgType.Origin === "client" ? "import" : "export",
         isExpanded: state.expanded.has(id),
         isSelected: state.selected === id,
-        label: (
-          <ContextMenu2 {...contentSizing} content={<div>placeholder</div>}>
-            <Tooltip2 content="placeholder" placement="right">
-              {msgType.Origin === "client" ? "Client" : "Server"}
-            </Tooltip2>
-          </ContextMenu2>
-        ),
+        label: msgType.Origin === "client" ? "Client" : "Server",
         childNodes: [],
       }
       originNode = {
@@ -102,7 +88,9 @@ export const PacketTypeTree = (props: Props) => {
     const node: TreeNodeInfo<MessageType> = {
       id,
       icon: "document",
-      label: name,
+      label: (
+        <Tooltip2 content={name} placement="top-start">{name}</Tooltip2>
+      ),
       nodeData: msgType,
       isSelected: state.selected === id,
     };
@@ -123,5 +111,3 @@ export const PacketTypeTree = (props: Props) => {
     </AppDataContext.Consumer>
   );
 };
-
-const contentSizing = { popoverProps: { popoverClassName: Popover2Classes.POPOVER2_CONTENT_SIZING } };
